@@ -47,13 +47,13 @@ namespace CBTDWeb.Pages.Categories
 			if (objCategory.Id == 0)
 			{
 				_db.Categories.Add(objCategory);
-				//TempData["success"] = "Category added Successfully";
+				TempData["success"] = "Category added Successfully";
 			}
 			//if category exists
 			else
 			{
 				_db.Categories.Update(objCategory);
-				//TempData["success"] = "Category updated Successfully";
+				TempData["success"] = "Category updated Successfully";
 			}
 			_db.SaveChanges();
 
