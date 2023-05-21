@@ -12,10 +12,10 @@ namespace CBTD.DataAccess
             _dbContext = dbContext;
         }
 
-        private IGenericRepository<Category> _Category;
+        
         //ADD ADDITIONAL MODELS HERE
-
-
+        private IGenericRepository<Category> _Category;
+        private IGenericRepository<Manufacturer> _Manufacturer;
 
         public IGenericRepository<Category> Category
         {
@@ -31,6 +31,20 @@ namespace CBTD.DataAccess
             }
         }
 
+
+        public IGenericRepository<Manufacturer> Manufacturer
+        {
+            get
+            {
+
+                if (_Manufacturer == null)
+                {
+                    _Manufacturer = new GenericRepository<Manufacturer>(_dbContext);
+                }
+
+                return _Manufacturer;
+            }
+        }
         //ADD ADDITIONAL METHODS FOR EACH MODEL (similar to Category) HERE
 
         public int Commit()

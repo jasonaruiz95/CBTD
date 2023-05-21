@@ -10,6 +10,8 @@ namespace CBTD.DataAccess
         }
 
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Manufacturer> Manufacturers { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -18,7 +20,18 @@ namespace CBTD.DataAccess
                 new Category { Id = 2, Name = "Wine", DisplayOrder = 2 },
                 new Category { Id = 3, Name = "Books", DisplayOrder = 3 }
                );
+
+
+            modelBuilder.Entity<Manufacturer>().HasData(
+                new Manufacturer { Id = 1, Name = "Coca Cola" },
+                new Manufacturer { Id = 2, Name = "Hostess" },
+                new Manufacturer { Id = 3, Name = "Scholastic" }
+               );
         }
+
+
+
+
 
     }
 
