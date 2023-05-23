@@ -1,4 +1,4 @@
-﻿using CBTD.Models.Interfaces;
+﻿using CBTD.ApplicationCore.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -108,7 +108,7 @@ namespace CBTD.DataAccess
             return _dbContext.Set<T>().Find(id);
         }
 
-        public virtual IEnumerable<T> List(Expression<Func<T, bool>> predicate, Expression<Func<T, int>> orderBy = null, string includes = null)
+        public virtual IEnumerable<T> GetAll(Expression<Func<T, bool>> predicate, Expression<Func<T, int>> orderBy = null, string includes = null)
         {
             IQueryable<T> queryable = _dbContext.Set<T>();
             if (predicate != null && includes == null)
@@ -152,7 +152,7 @@ namespace CBTD.DataAccess
             }
         }
 
-        public async Task<IEnumerable<T>> ListAsync(Expression<Func<T, bool>> predicate, Expression<Func<T, int>> orderBy = null, string includes = null)
+        public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> predicate, Expression<Func<T, int>> orderBy = null, string includes = null)
         {
             IQueryable<T> queryable = _dbContext.Set<T>();
             if (predicate != null && includes == null)

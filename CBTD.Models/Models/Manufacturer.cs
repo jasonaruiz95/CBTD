@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CBTD.Models
+namespace CBTD.ApplicationCore.Models
 {
     public class Manufacturer
     {

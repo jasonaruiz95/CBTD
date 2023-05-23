@@ -4,6 +4,7 @@ using CBTD.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CBTDWeb.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230523190329_AddedProduct")]
+    partial class AddedProduct
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,21 +51,21 @@ namespace CBTDWeb.Migrations
                         new
                         {
                             Id = 1,
-                            DateModified = new DateTime(2023, 5, 23, 13, 7, 24, 454, DateTimeKind.Local).AddTicks(4691),
+                            DateModified = new DateTime(2023, 5, 23, 13, 3, 29, 606, DateTimeKind.Local).AddTicks(899),
                             DisplayOrder = 1,
                             Name = "Beverages"
                         },
                         new
                         {
                             Id = 2,
-                            DateModified = new DateTime(2023, 5, 23, 13, 7, 24, 454, DateTimeKind.Local).AddTicks(4739),
+                            DateModified = new DateTime(2023, 5, 23, 13, 3, 29, 606, DateTimeKind.Local).AddTicks(948),
                             DisplayOrder = 2,
                             Name = "Wine"
                         },
                         new
                         {
                             Id = 3,
-                            DateModified = new DateTime(2023, 5, 23, 13, 7, 24, 454, DateTimeKind.Local).AddTicks(4741),
+                            DateModified = new DateTime(2023, 5, 23, 13, 3, 29, 606, DateTimeKind.Local).AddTicks(950),
                             DisplayOrder = 3,
                             Name = "Books"
                         });
@@ -117,18 +120,18 @@ namespace CBTDWeb.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("DozenPrice")
-                        .HasColumnType("float");
+                    b.Property<decimal>("DozenPrice")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<double>("HalfDozenPrice")
-                        .HasColumnType("float");
+                    b.Property<decimal>("HalfDozenPrice")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("ImageURL")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("ListPrice")
-                        .HasColumnType("float");
+                    b.Property<decimal>("ListPrice")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("ManufacturerId")
                         .HasColumnType("int");
@@ -145,8 +148,8 @@ namespace CBTDWeb.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("UnitPrice")
-                        .HasColumnType("float");
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 

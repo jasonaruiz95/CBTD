@@ -1,6 +1,6 @@
+using CBTD.ApplicationCore.Models;
 using CBTD.DataAccess;
-using CBTD.Models;
-using CBTD.Models.Interfaces;
+using CBTD.ApplicationCore.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -8,12 +8,12 @@ namespace CBTDWeb.Pages.Manufacturers
 {
     public class DeleteModel : PageModel
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly UnitOfWork _unitOfWork;
         [BindProperty]
         public Manufacturer objManufacturer { get; set; }
 
 
-        public DeleteModel(IUnitOfWork unitOfWork)
+        public DeleteModel(UnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }

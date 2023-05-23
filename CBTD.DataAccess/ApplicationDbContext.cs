@@ -1,4 +1,4 @@
-﻿using CBTD.Models;
+﻿using CBTD.ApplicationCore.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace CBTD.DataAccess
@@ -11,6 +11,7 @@ namespace CBTD.DataAccess
 
         public DbSet<Category> Categories { get; set; }
         public DbSet<Manufacturer> Manufacturers { get; set; }
+        public DbSet<Product> Products{ get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -27,6 +28,8 @@ namespace CBTD.DataAccess
                 new Manufacturer { Id = 2, Name = "Hostess" },
                 new Manufacturer { Id = 3, Name = "Scholastic" }
                );
+
+
         }
 
 

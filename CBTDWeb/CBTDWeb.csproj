@@ -17,7 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CBTD.DataAccess\CBTD.DataAccess.csproj" />
-    <ProjectReference Include="..\CBTD.Models\CBTD.Models.csproj" />
+    <ProjectReference Include="..\CBTD.Models\CBTD.ApplicationCore.csproj" />
   </ItemGroup>
 
 </Project>
