@@ -55,7 +55,7 @@ namespace CBTD.DataAccess
 
                 foreach (var includeProperty in includes.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    queryable.Include(includeProperty);
+					queryable = queryable.Include(includeProperty);
                 }
 
                 if (asNotTracking) // is set to fale, we're not tracking changes
@@ -89,7 +89,7 @@ namespace CBTD.DataAccess
 
                 foreach (var includeProperty in includes.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    queryable.Include(includeProperty);
+					queryable = queryable.Include(includeProperty);
                 }
 
                 if (asNotTracking) // is set to fale, we're not tracking changes

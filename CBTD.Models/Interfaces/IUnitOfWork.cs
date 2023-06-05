@@ -8,6 +8,7 @@ namespace CBTD.ApplicationCore.Interfaces
         public IGenericRepository<Manufacturer> Manufacturer { get; }
 
         public IGenericRepository<Product> Product{ get; }
+        public IGenericRepository<ApplicationUser> ApplicationUser { get; }
 
         //ADD other Models/Tables here as you create them
 

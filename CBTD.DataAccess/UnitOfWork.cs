@@ -17,6 +17,7 @@ namespace CBTD.DataAccess
         private IGenericRepository<Category> _Category;
         private IGenericRepository<Manufacturer> _Manufacturer;
         private IGenericRepository<Product> _Product;
+        private IGenericRepository<ApplicationUser> _ApplicationUser;
 
         public IGenericRepository<Category> Category
         {
@@ -60,6 +61,19 @@ namespace CBTD.DataAccess
                 return _Product;
             }
         }
+
+        public IGenericRepository<ApplicationUser> ApplicationUser
+        {
+            get
+            {
+                if (_ApplicationUser == null)
+                {
+                    _ApplicationUser = new GenericRepository<ApplicationUser>(_dbContext);
+                }
+                return _ApplicationUser;
+            }
+        }
+
 
         public int Commit()
         {
