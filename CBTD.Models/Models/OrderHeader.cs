@@ -18,6 +18,9 @@ namespace CBTD.ApplicationCore.Models
         [ValidateNever]
         public ApplicationUser ApplicationUser { get; set; }
 
+
+        
+
         [Required]
         public DateTime OrderDate { get; set; }
         public DateTime ShippingDate { get; set; }

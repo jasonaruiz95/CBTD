@@ -142,9 +142,7 @@ namespace CBTD.DataAccess
             {
                 if (orderBy == null)
                 {
-
-                    return queryable.OrderBy(orderBy).ToList().AsEnumerable();
-
+					return queryable.Where(predicate).ToList();
                 }
                 else
                 {

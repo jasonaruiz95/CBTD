@@ -15,6 +15,9 @@ namespace CBTD.ApplicationCore.ViewModels
         public int Count { get; set; }
         public IEnumerable<ShoppingCart> cartItems { get; set; }
         public double CartTotal { get; set; }
+
+        public OrderHeader OrderHeader { get; set; } 
+
     }
 }
 

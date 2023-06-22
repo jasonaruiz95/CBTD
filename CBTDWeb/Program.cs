@@ -5,9 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using CBTD.Utility;
 using DataAccess.DbInitializer;
-
-
-
+using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +26,8 @@ builder.Services.AddScoped<DbInitializer>();
 builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddDefaultTokenProviders()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
+builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
+
 builder.Services.ConfigureApplicationCookie(options =>
 {
 	options.LoginPath = $"/Identity/Account/Login";
@@ -38,6 +38,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 builder.Services.AddSingleton<IEmailSender, EmailSender>();
 
 builder.Services.AddScoped<UnitOfWork, UnitOfWork>();
+
 
 var app = builder.Build();
 
@@ -59,6 +60,8 @@ app.UseStaticFiles();
 app.UseRouting();
 
 SeedDatabase();
+
+StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey").Get<string>();
 
 app.UseAuthorization();
 
