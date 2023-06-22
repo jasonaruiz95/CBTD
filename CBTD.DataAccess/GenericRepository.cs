@@ -1,4 +1,5 @@
 ﻿using CBTD.ApplicationCore.Interfaces;
+using CBTD.ApplicationCore.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CBTD.DataAccess
 {
-    internal class GenericRepository<T> : IGenericRepository<T> where T : class
+    public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         private readonly ApplicationDbContext _dbContext;
         public GenericRepository(ApplicationDbContext dbContext)
@@ -203,5 +204,18 @@ namespace CBTD.DataAccess
             _dbContext.Entry(entity).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             _dbContext.SaveChanges();
         }
-    }
+
+		public int DecrementCount(ShoppingCart shoppingCart, int count)
+		{
+			shoppingCart.Count -= count;
+			return shoppingCart.Count;
+		}
+
+		public int IncrementCount(ShoppingCart shoppingCart, int count)
+		{
+			shoppingCart.Count += count;
+			return shoppingCart.Count;
+		}
+
+	}
 }

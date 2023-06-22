@@ -18,6 +18,9 @@ namespace CBTD.DataAccess
         private IGenericRepository<Manufacturer> _Manufacturer;
         private IGenericRepository<Product> _Product;
         private IGenericRepository<ApplicationUser> _ApplicationUser;
+        private IGenericRepository<ShoppingCart> _ShoppingCart;
+        private IOrderHeaderRepository<OrderHeader> _OrderHeader;
+        private IGenericRepository<OrderDetails> _OrderDetails;
 
         public IGenericRepository<Category> Category
         {
@@ -73,7 +76,47 @@ namespace CBTD.DataAccess
                 return _ApplicationUser;
             }
         }
+        public IGenericRepository<ShoppingCart> ShoppingCart
+        {
+            get
+            {
 
+                if (_ShoppingCart == null)
+                {
+                    _ShoppingCart = new GenericRepository<ShoppingCart>(_dbContext);
+                }
+
+                return _ShoppingCart;
+            }
+        }
+
+        public IOrderHeaderRepository<OrderHeader> OrderHeader
+        {
+            get
+            {
+
+                if (_OrderHeader == null)
+                {
+                    _OrderHeader = new OrderHeaderRepository(_dbContext);
+                }
+
+                return _OrderHeader;
+            }
+        }
+
+        public IGenericRepository<OrderDetails> OrderDetails
+        {
+            get
+            {
+
+                if (_OrderDetails == null)
+                {
+                    _OrderDetails = new GenericRepository<OrderDetails>(_dbContext);
+                }
+
+                return _OrderDetails;
+            }
+        }
 
         public int Commit()
         {
