@@ -111,8 +111,8 @@ namespace CBTDWeb.Pages.Cart
 				},
 				LineItems = new List<SessionLineItemOptions>(),
 				Mode = "payment",
-				SuccessUrl = domain + $"cart/OrderConfirmation?Orderid={ShoppingCartVM.OrderHeader.Id}",
-				CancelUrl = domain + $"cart/index",
+				SuccessUrl = domain + $"Customer/cart/OrderConfirmation?Orderid={ShoppingCartVM.OrderHeader.Id}",
+				CancelUrl = domain + $"Customer/cart/index",
 			};
 
 			foreach (var item in ShoppingCartVM.cartItems)

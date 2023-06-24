@@ -26,9 +26,4 @@
     <ProjectReference Include="..\CBTD.Utility\CBTD.Utility.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Areas\Admin\" />
-    <Folder Include="Areas\Customer\" />
-  </ItemGroup>
-
 </Project>

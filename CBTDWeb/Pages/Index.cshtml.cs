@@ -7,23 +7,9 @@ namespace CBTDWeb.Pages
 {
     public class IndexModel : PageModel
     {
-        private readonly UnitOfWork _unitOfWork;
-        
-
-        //[BindProperty]
-        public IEnumerable<Product> objProductList;
-        public IEnumerable<Category> objCategoryList;
-
-        public IndexModel(UnitOfWork unitOfWork)
-        {
-            _unitOfWork = unitOfWork;
-        }
-
         public IActionResult OnGet()
         {
-            objProductList = _unitOfWork.Product.GetAll(null, null, "Category,Manufacturer");
-            objCategoryList = _unitOfWork.Category.GetAll(null, c => c.DisplayOrder);
-            return Page();
+            return RedirectToPage("/Home/Index", new { area = "Customer" });
         }
     }
 }
