@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CBTD.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230622023529_Initial")]
+    [Migration("20230624001454_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -107,7 +107,6 @@ namespace CBTD.DataAccess.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Carrier")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("City")
@@ -135,7 +134,6 @@ namespace CBTD.DataAccess.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("PaymentIntentId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PaymentStatus")
@@ -151,7 +149,6 @@ namespace CBTD.DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SessionId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ShippingDate")

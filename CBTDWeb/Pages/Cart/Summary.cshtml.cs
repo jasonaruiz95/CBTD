@@ -1,55 +1,58 @@
+using CBTD.ApplicationCore.Interfaces;
 using CBTD.ApplicationCore.Models;
 using CBTD.ApplicationCore.ViewModels;
 using CBTD.DataAccess;
 using CBTD.Utility;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Stripe;
 using Stripe.Checkout;
 using System.Security.Claims;
 
 namespace CBTDWeb.Pages.Cart
 {
-    public class SummaryModel : PageModel
-    {
-        private readonly UnitOfWork _unitOfWork;
+	public class SummaryModel : PageModel
+	{
+		private readonly UnitOfWork _unitOfWork;
 
-        [BindProperty]
-        public ShoppingCartVM ShoppingCartVM { get; set; }
-        public SummaryModel(UnitOfWork unitOfWork)
-        {
-            _unitOfWork = unitOfWork;
+		[BindProperty]
+		public ShoppingCartVM ShoppingCartVM { get; set; }
+		public SummaryModel(UnitOfWork unitOfWork)
+		{
+			_unitOfWork = unitOfWork;
 
-        }
-        public IActionResult OnGet()
-        {
-            var claimsIdentity = (ClaimsIdentity)User.Identity;
-            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+		}
+		public IActionResult OnGet()
+		{
+			var claimsIdentity = (ClaimsIdentity)User.Identity;
+			var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
-            ShoppingCartVM = new ShoppingCartVM()
-            {
-                cartItems = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == claim.Value,
-                includes: "Product"),
-                OrderHeader = new()
-            };
-            ShoppingCartVM.OrderHeader.ApplicationUser = _unitOfWork.ApplicationUser.Get(
-                u => u.Id == claim.Value);
+			ShoppingCartVM = new ShoppingCartVM()
+			{
+				cartItems = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == claim.Value,
+				includes: "Product"),
+				OrderHeader = new()
+			};
+			ShoppingCartVM.OrderHeader.ApplicationUser = _unitOfWork.ApplicationUser.Get(
+				u => u.Id == claim.Value);
 
-            ShoppingCartVM.OrderHeader.Name = ShoppingCartVM.OrderHeader.ApplicationUser.FullName;
-            ShoppingCartVM.OrderHeader.PhoneNumber = ShoppingCartVM.OrderHeader.ApplicationUser.PhoneNumber;
-            ShoppingCartVM.OrderHeader.StreetAddress = ShoppingCartVM.OrderHeader.ApplicationUser.StreetAddress;
-            ShoppingCartVM.OrderHeader.City = ShoppingCartVM.OrderHeader.ApplicationUser.City;
-            ShoppingCartVM.OrderHeader.State = ShoppingCartVM.OrderHeader.ApplicationUser.State;
-            ShoppingCartVM.OrderHeader.PostalCode = ShoppingCartVM.OrderHeader.ApplicationUser.PostalCode;
+			ShoppingCartVM.OrderHeader.Name = ShoppingCartVM.OrderHeader.ApplicationUser.FullName;
+			ShoppingCartVM.OrderHeader.PhoneNumber = ShoppingCartVM.OrderHeader.ApplicationUser.PhoneNumber;
+			ShoppingCartVM.OrderHeader.StreetAddress = ShoppingCartVM.OrderHeader.ApplicationUser.StreetAddress;
+			ShoppingCartVM.OrderHeader.City = ShoppingCartVM.OrderHeader.ApplicationUser.City;
+			ShoppingCartVM.OrderHeader.State = ShoppingCartVM.OrderHeader.ApplicationUser.State;
+			ShoppingCartVM.OrderHeader.PostalCode = ShoppingCartVM.OrderHeader.ApplicationUser.PostalCode;
 
-            foreach (var cart in ShoppingCartVM.cartItems)
-            {
-                cart.Price = GetPriceBasedOnQuantity(cart.Count, cart.Product.UnitPrice,
-                    cart.Product.HalfDozenPrice, cart.Product.DozenPrice);
-                ShoppingCartVM.OrderHeader.OrderTotal += cart.Price * cart.Count;
+			foreach (var cart in ShoppingCartVM.cartItems)
+			{
+				cart.Price = GetPriceBasedOnQuantity(cart.Count, cart.Product.UnitPrice,
+					cart.Product.HalfDozenPrice, cart.Product.DozenPrice);
+				ShoppingCartVM.OrderHeader.OrderTotal += cart.Price * cart.Count;
 
-            }
-            return Page();
-        }
+			}
+			return Page();
+		}
 		public IActionResult OnPost()
 		{
 			var claimsIdentity = User.Identity as ClaimsIdentity;
@@ -99,7 +102,7 @@ namespace CBTDWeb.Pages.Cart
 			_unitOfWork.Commit();
 
 			//stripe settings 
-			var domain = "https://localhost:7025/";
+			var domain = "https://localhost:5238/";
 			var options = new SessionCreateOptions
 			{
 				PaymentMethodTypes = new List<string>
@@ -144,31 +147,31 @@ namespace CBTDWeb.Pages.Cart
 
 			//grab the URL from the session
 			Response.Headers.Add("Location", session.Url);
-			//return a redirect to the original session location
+			//return a redirect to the orignal session location
 			_unitOfWork.OrderHeader.UpdateStripePaymentID(ShoppingCartVM.OrderHeader.Id, session.Id, session.PaymentLinkId);
 			_unitOfWork.Commit();
 
 			return new StatusCodeResult(303);  //success URL
 
+
+
+
 		}
 
-
 		private double GetPriceBasedOnQuantity(int quantity, double price, double priceHalfDozen, double priceDozen)
-        {
-            if (quantity <= 5)
-            {
-                return price;
-            }
-            else
-            {
-                if (quantity <= 11)
-                {
-                    return priceHalfDozen;
-                }
-                return priceDozen;
-            }
-        }
-
-    }
-
+		{
+			if (quantity <= 5)
+			{
+				return price;
+			}
+			else
+			{
+				if (quantity <= 11)
+				{
+					return priceHalfDozen;
+				}
+				return priceDozen;
+			}
+		}
+	}
 }

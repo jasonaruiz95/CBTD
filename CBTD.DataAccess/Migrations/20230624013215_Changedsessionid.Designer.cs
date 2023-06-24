@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CBTD.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230622023801_ChangedCarrierReuirement")]
-    partial class ChangedCarrierReuirement
+    [Migration("20230624013215_Changedsessionid")]
+    partial class Changedsessionid
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -107,7 +107,6 @@ namespace CBTD.DataAccess.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Carrier")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("City")
@@ -135,7 +134,6 @@ namespace CBTD.DataAccess.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("PaymentIntentId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PaymentStatus")
@@ -151,7 +149,6 @@ namespace CBTD.DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SessionId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ShippingDate")
@@ -166,7 +163,6 @@ namespace CBTD.DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TrackingNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

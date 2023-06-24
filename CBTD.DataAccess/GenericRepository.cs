@@ -1,208 +1,254 @@
 ﻿using CBTD.ApplicationCore.Interfaces;
 using CBTD.ApplicationCore.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace CBTD.DataAccess
 {
-    public class GenericRepository<T> : IGenericRepository<T> where T : class
-    {
-        private readonly ApplicationDbContext _dbContext;
-        public GenericRepository(ApplicationDbContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
-        public void Add(T entity)
-        {
-            _dbContext.Set<T>().Add(entity);
-            _dbContext.SaveChanges();
+	public class GenericRepository<T> : IGenericRepository<T> where T : class
+	{
+		// By using ReadOnly ApplicationDbContext, you can have access to only
+		// querying capabilities of DbContext. UnitOfWork actually writes
+		// (commits) to the PHYSICAL tables (not internal object).
+		private readonly ApplicationDbContext _dbContext;
 
-        }
+		public GenericRepository(ApplicationDbContext dbContext)
+		{
+			_dbContext = dbContext;
 
-        public void Delete(T entity)
-        {
-            _dbContext.Set<T>().Remove(entity);
-            _dbContext.SaveChanges();
-        }
+		}
 
-        public void Delete(IEnumerable<T> entities)
-        {
-            _dbContext.Set<T>().RemoveRange(entities);
-            _dbContext.SaveChanges();
-        }
+		public void Add(T entity)
+		{
+			_dbContext.Set<T>().Add(entity);
+			_dbContext.SaveChanges();
+		}
 
-        public virtual T Get(Expression<Func<T, bool>> predicate, bool asNotTracking = false, string includes = null)
-        {
-            if (includes == null) // We are not joining any objects
-            {
-                if (asNotTracking) // is set to fale, we're not tracking changes
-                {
-                    return _dbContext.Set<T>().Where(predicate).AsNoTracking().FirstOrDefault();
-                }
-                else // if I am tracking changes
-                {
-                    return _dbContext.Set<T>().Where(predicate).FirstOrDefault();
-                }
-            }
-            else //if there are other objects to include (join)
-            //includes = "Address,Finances,Dependents"
-            {
-                IQueryable<T> queryable = _dbContext.Set<T>();
+		public void Delete(T entity)
+		{
+			_dbContext.Set<T>().Remove(entity);
+			_dbContext.SaveChanges();
+		}
 
-                foreach (var includeProperty in includes.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-                {
+		public void Delete(IEnumerable<T> entities)
+		{
+			_dbContext.Set<T>().RemoveRange(entities);
+			_dbContext.SaveChanges();
+		}
+
+		public virtual T Get(Expression<Func<T, bool>> predicate, bool asNotTracking = false, string includes = null)
+		{
+			if (includes == null)   // we are not joining any objects
+			{
+				if (!asNotTracking) // set to false, we're not tracking changes
+				{
+					return _dbContext.Set<T>()
+					  .Where(predicate)
+					  .AsNoTracking()
+					  .FirstOrDefault();
+				}
+
+				else // I am tracking changes
+				{
+					return _dbContext.Set<T>()
+					  .Where(predicate)
+					  .FirstOrDefault();
+				}
+			}
+
+			else // If other objects to include (join)
+				 // includes = "Address, Finances,Dependents"
+			{
+				IQueryable<T> queryable = _dbContext.Set<T>();
+
+				foreach (var includeProperty in includes.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+				{
 					queryable = queryable.Include(includeProperty);
-                }
+				}
 
-                if (asNotTracking) // is set to fale, we're not tracking changes
-                {
-                    return queryable.Where(predicate).AsNoTracking().FirstOrDefault();
-                }
-                else // if I am tracking changes
-                {
-                    return queryable.Where(predicate).FirstOrDefault();
-                }
-            }
-        }
+				if (!asNotTracking) // set to false, we're not tracking changes
+				{
+					return queryable
+					  .Where(predicate)
+					  .AsNoTracking()
+					  .FirstOrDefault();
+				}
 
-        public virtual async Task<T> GetAsync(Expression<Func<T, bool>> predicate, bool asNotTracking = false, string includes = null)
-        {
-            if (includes == null) // We are not joining any objects
-            {
-                if (asNotTracking) // is set to fale, we're not tracking changes
-                {
-                    return await _dbContext.Set<T>().Where(predicate).AsNoTracking().FirstOrDefaultAsync();
-                }
-                else // if I am tracking changes
-                {
-                    return await _dbContext.Set<T>().Where(predicate).FirstOrDefaultAsync();
-                }
-            }
-            else //if there are other objects to include (join)
-            //includes = "Address,Finances,Dependents"
-            {
-                IQueryable<T> queryable = _dbContext.Set<T>();
+				else // I am tracking changes
+				{
+					return queryable
+					  .Where(predicate)
+					  .FirstOrDefault();
+				}
+			}
+		}
 
-                foreach (var includeProperty in includes.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-                {
+		public virtual async Task<T> GetAsync(Expression<Func<T, bool>> predicate, bool asNotTracking = false, string includes = null)
+		{
+			if (includes == null)   // we are not joining any objects
+			{
+				if (!asNotTracking) // set to false, we're not tracking changes
+				{
+					return await _dbContext.Set<T>()
+					  .Where(predicate)
+					  .AsNoTracking()
+					  .FirstOrDefaultAsync();
+				}
+
+				else // I am tracking changes
+				{
+					return await _dbContext.Set<T>()
+					  .Where(predicate)
+					  .FirstOrDefaultAsync();
+				}
+			}
+
+			else // If other objects to include (join)
+				 // includes = "Address, Finances,Dependents"
+			{
+				IQueryable<T> queryable = _dbContext.Set<T>();
+
+				foreach (var includeProperty in includes.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+				{
 					queryable = queryable.Include(includeProperty);
-                }
+				}
 
-                if (asNotTracking) // is set to fale, we're not tracking changes
-                {
-                    return await queryable.Where(predicate).AsNoTracking().FirstOrDefaultAsync();
-                }
-                else // if I am tracking changes
-                {
-                    return await queryable.Where(predicate).FirstOrDefaultAsync();
-                }
-            }
-        }
+				if (!asNotTracking) // set to false, we're not tracking changes
+				{
+					return await queryable
+					  .Where(predicate)
+					  .AsNoTracking()
+					  .FirstOrDefaultAsync();
+				}
 
-        public virtual T GetById(int? id)
-        {
-            return _dbContext.Set<T>().Find(id);
-        }
+				else // I am tracking changes
+				{
+					return await queryable
+					  .Where(predicate)
+					  .FirstOrDefaultAsync();
+				}
+			}
+		}
 
-        public virtual IEnumerable<T> GetAll(Expression<Func<T, bool>> predicate, Expression<Func<T, int>> orderBy = null, string includes = null)
-        {
-            IQueryable<T> queryable = _dbContext.Set<T>();
-            if (predicate != null && includes == null)
-            {
-                return _dbContext.Set<T>()
-                    .Where(predicate)
-                    .AsEnumerable();
-            }
-            // has optional includes
-            else if (includes != null)
-            {
-                foreach (var includeProperty in includes.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-                {
-                    queryable = queryable.Include(includeProperty);
-                }
-            }
+		// The virtual keyword is used to modify a method, property, indexer, or
+		// and allows for it to be overridden in a derived class.
+		public virtual T GetById(int? id)
+		{
+			return _dbContext.Set<T>().Find(id);
+		}
 
-            if (predicate == null)
-            {
-                if (orderBy == null)
-                {
-                    return queryable.AsEnumerable();
-                }
-                else
-                {
-                    return queryable.OrderBy(orderBy).ToList().AsEnumerable();
-                }
-            }
-            else
-            {
-                if (orderBy == null)
-                {
+
+
+
+		public virtual async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> predicate = null, Expression<Func<T, int>> orderBy = null, string includes = null)
+		{
+			IQueryable<T> queryable = _dbContext.Set<T>();
+			if (predicate != null && includes == null)
+			{
+				return _dbContext.Set<T>()
+					.Where(predicate)
+					.AsEnumerable();
+			}
+			// has optional includes
+			else if (includes != null)
+			{
+				foreach (var includeProperty in includes.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+				{
+					queryable = queryable.Include(includeProperty);
+				}
+			}
+
+			if (predicate == null)
+			{
+				if (orderBy == null)
+				{
+					return queryable.AsEnumerable();
+				}
+				else
+				{
+					return await queryable.OrderBy(orderBy).ToListAsync();
+				}
+			}
+			else
+			{
+				if (orderBy == null)
+				{
+
+					if (orderBy == null)
+					{
+
+						return queryable.Where(predicate).ToList();
+
+					}
+					else
+					{
+						return queryable.Where(predicate).OrderBy(orderBy).ToList();
+					}
+
+				}
+				else
+				{
+					return await queryable.Where(predicate).OrderBy(orderBy).ToListAsync();
+				}
+			}
+		}
+
+		public void Update(T entity)
+		{
+			_dbContext.Entry(entity).State = EntityState.Modified;
+			_dbContext.SaveChanges();
+		}
+
+		public IEnumerable<T> GetAll(Expression<Func<T, bool>> predicate = null, Expression<Func<T, int>> orderBy = null, string includes = null)
+		{
+			IQueryable<T> queryable = _dbContext.Set<T>();
+			if (predicate != null && includes == null)
+			{
+				return _dbContext.Set<T>()
+					.Where(predicate)
+					.AsEnumerable();
+			}
+			// has optional includes
+			else if (includes != null)
+			{
+				foreach (var includeProperty in includes.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+				{
+					queryable = queryable.Include(includeProperty);
+				}
+			}
+
+			if (predicate == null)
+			{
+				if (orderBy == null)
+				{
+					return queryable.AsEnumerable();
+				}
+				else
+				{
+					return queryable.OrderBy(orderBy).ToList();
+				}
+			}
+			else
+			{
+				if (orderBy == null)
+				{
+
 					return queryable.Where(predicate).ToList();
-                }
-                else
-                {
-                    return queryable.Where(predicate).OrderBy(orderBy).ToList();
-                }
-            }
-        }
 
-        public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> predicate, Expression<Func<T, int>> orderBy = null, string includes = null)
-        {
-            IQueryable<T> queryable = _dbContext.Set<T>();
-            if (predicate != null && includes == null)
-            {
-                return await _dbContext.Set<T>()
-                    .Where(predicate).ToListAsync();
-            }
-            // has optional includes
-            else if (includes != null)
-            {
-                foreach (var includeProperty in includes.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-                {
-                    queryable = queryable.Include(includeProperty);
-                }
-            }
-            if (predicate == null)
-            {
-                if (orderBy == null)
-                {
-                    return await queryable.ToListAsync();
-                }
-                else
-                {
-                    return await queryable.OrderBy(orderBy).ToListAsync();
-                }
-            }
-            else
-            {
-                if (orderBy == null)
-                {
-                    return await queryable.OrderBy(orderBy).ToListAsync();
-                }
-                else
-                {
-                    return await queryable.Where(predicate).OrderBy(orderBy).ToListAsync();
-                }
-            }
-        }
+				}
+				else
+				{
+					return queryable.Where(predicate).OrderBy(orderBy).ToList();
+				}
+			}
 
-
-        public IEnumerable<T> ToList()
-        {
-            return _dbContext.Set<T>().ToList().AsEnumerable();
-        }
-
-        public void Update(T entity)
-        {
-            _dbContext.Entry(entity).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-            _dbContext.SaveChanges();
-        }
-
+		}
+		public IEnumerable<T> ToList()
+		{
+			return _dbContext.Set<T>().ToList().AsEnumerable();
+		}
+		
 		public int DecrementCount(ShoppingCart shoppingCart, int count)
 		{
 			shoppingCart.Count -= count;
@@ -211,9 +257,8 @@ namespace CBTD.DataAccess
 
 		public int IncrementCount(ShoppingCart shoppingCart, int count)
 		{
-			shoppingCart.Count += count;
-			return shoppingCart.Count;
+			//shoppingCart.Count += count;
+			return shoppingCart.Count += count;
 		}
-
 	}
 }
