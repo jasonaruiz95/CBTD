@@ -1,93 +1,41 @@
 ﻿@page
-@model CBTDWeb.Pages.Products.IndexModel
+@model CBTDWeb.Areas.Admin.Pages.Products.IndexModel
 @{
+    ViewData["Title"] = "Products";
 }
 
-<div class="container">
-	<div class="row pt=4">
-		<div class="col-6">
-			<!-- Start Row col-6 takes 6 of the 12 available columns -->
-			<h2 class="text-primary">
-				Product List
-			</h2>
-		</div>
-		<div class="col-6 text-end">
-			<!-- Start Row col-6 takes 6 of the 12 available columns right justified-->
-			<a asp-page="Upsert" asp-route-id="0" class="btn btn-primary">
-				<i class="bi bi-plus-circle"></i> Create New Product
-			</a>
 
-		</div>
-	</div>
-	<table>
-	</table>
-</div> <!--close container-->
-
-<table class="table table-bordered table-striped" style="width:100%">
-	<thead>
-		<tr>
-			<th>
-				Product Name
-			</th>
-			<th>
-				Product Id
-			</th>
-			<th>&nbsp;</th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var obj in Model.objProductList)
-		{
-			<tr>
-				<td width="50%">@obj.Name</td>
-				<td width="30%">@obj.Id</td>
-				<td>
-					<div class="w-75 btn-group" role="group">
-						<a asp-page="Upsert" asp-route-id="@obj.Id" class="btn btn-primary mx-2">
-							<i class="bi bi-pencil-square"></i> Edit
-						</a>
-						<a asp-page="Delete" asp-route-id="@obj.Id" class="btn btn-danger mx-2">
-							<i class="bi bi-trash-fill"></i> Delete
-						</a>
-					</div>
-				</td>
-
-			</tr>
-		}
-	</tbody>
-</table>
-
-
-@*
-@foreach (var product in @Model.objProductList)
-{
-	<div class="row pb-3">
-		<div class="col-lg-3 col-md-6">
-			<div class="row p-2">
-				<div class="col-12 p-1" style="border:1px solid #008cba; border-radius: 5px;">
-					<div class="card">
-						<img src="@product.ImageURL" class="card-img-top rounded" />
-						PRODUCT IMAGE GOES HERE
-						<div class="card-body">
-							<div class="pl-1">
-								<p class="card-title h5 text-primary">@product.Name @product.Size</p>
-								<p class="card-title text-info">by <b>@product.ProductId</b></p>
-							</div>
-							<div class="pl-1">
-								<p>List Price: <strike><b>$@product.ListPrice.ToString("0.00")</b></strike></p>
-							</div>
-							<div class="pl-1">
-								<p>As low as: <b>$@product.DozenPrice.ToString("0.00")</b></p>
-							</div>
-						</div>
-					</div>
-					<div>
-						<a asp-page="Details" class="btn btn-primary form-control" asp-route-productId="">
-							Details
-						</a>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-}*@
+<div class="border backgroundWhite container p-3">
+    <div class="row pt-4">
+        <div class="col-6">
+            <h2 class="text-primary">Products</h2>
+        </div>
+        <div class="col-6 text-end">
+            <a asp-page="Upsert" asp-route-id="0" class="btn btn-primary"><i class="fas fa-plus"></i> Create New</a>
+        </div>
+    </div>
+    <br /><br />
+    <table class="table table-striped table-bordered" id="DT_load" sytle="width:100%">
+        <thead>
+            <tr>
+                <th>
+                    Product Name
+                </th>
+                <th>
+                    List Price
+                </th>
+                <th>
+                    Category
+                </th>
+                <th>
+                    Manufacturer
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+    </table>
+</div>
+@section Scripts
+    {
+    <script src="~/js/products.js"></script>
+}
